@@ -53,7 +53,7 @@ server.get("/", (req: Request, res: Response) => {
   res.send({ message: "I am the laundbot API" });
 });
 server.get("/api", (req: Request, res: Response) => {
-  res.json({ message: "I am the express API responding for team Panther" });
+  res.json({ message: "I am the laundbot API waiting for requests" });
 });
 
 server.use("/api", authRoute);
