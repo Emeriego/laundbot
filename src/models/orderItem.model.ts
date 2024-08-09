@@ -6,7 +6,7 @@ import { Item } from './item.model';
 @Entity()
 export class OrderItem {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @ManyToOne(() => Item, (item) => item.orderItems)
   item: Item;
@@ -17,4 +17,6 @@ export class OrderItem {
   @ManyToMany(() => Treatment)
   @JoinTable()
   treatments: Treatment[];
+
+  
 }

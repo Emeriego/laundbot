@@ -4,10 +4,19 @@ import { Shop } from './shop.model';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column()
-  name: string;
+  firstname: string;
+
+  @Column()
+  lastname: string;
+
+  @Column()
+  address: string;
+
+  @Column()
+  phone: string;
 
   @Column({ unique: true })
   email: string;
@@ -17,4 +26,10 @@ export class User {
 
   @OneToMany(() => Shop, (shop) => shop.user)
   shops: Shop[];
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }

@@ -6,7 +6,7 @@ import { Order } from "./order.model";
 @Entity()
 export class Package {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column()
   name: string;
@@ -19,4 +19,10 @@ export class Package {
 
   @OneToMany(() => Order, (order) => order.package)
   orders: Order[];
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }

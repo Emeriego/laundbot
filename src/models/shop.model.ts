@@ -2,11 +2,12 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, ManyToMan
 import { User } from './user.model';
 import { Package } from './package.model';
 import { Customer } from './customer.model';
+import { Order } from './order.model';
 
 @Entity()
 export class Shop {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column()
   name: string;
@@ -17,7 +18,22 @@ export class Shop {
   @OneToMany(() => Package, (pkg) => pkg.shop)
   packages: Package[];
 
+  @OneToMany(() => Order, (order) => order.shop)
+  orders: Order[];
+
   @ManyToMany(() => Customer, (customer) => customer.shops)
   @JoinTable()
   customers: Customer[];
+
+  @Column()
+  location: string;
+
+  @Column()
+  phone: string;
+  
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }

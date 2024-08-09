@@ -1,15 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { User } from "./models/user.model";
-import { Customer } from "./models/customer.model";
-import { Item } from "./models/item.model";
-import { Package } from "./models/package.model";
-import { Shop } from "./models/shop.model";
-import { Order } from "./models/order.model";
-import { OrderItem } from "./models/orderItem.model";
-import { Treatment } from "./models/treatment.model";
 import config from "./config";
-
 const isDevelopment = config.NODE_ENV === "development";
 
 const AppDataSource = new DataSource({
@@ -21,24 +12,14 @@ const AppDataSource = new DataSource({
   database: config.DB_NAME,
   synchronize: isDevelopment,
   logging: false,
-  entities: [
-    User,
-    Customer,
-    Item,
-    Package,
-    Shop,
-    Order,
-    OrderItem,
-    Treatment,
-  ],
+  entities: ["src/models/**/*.ts"],
   migrations: ["src/migrations/**/*.ts"],
   migrationsTableName: "migrations",
-  // Uncomment and configure SSL if needed
   // ssl: true,
   // extra: {
-  //   ssl: {
-  //     rejectUnauthorized: false,
-  //   },
+  // ssl: {
+  //   rejectUnauthorized: false,
+  // },
   // },
 });
 

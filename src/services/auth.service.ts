@@ -15,9 +15,9 @@ class AuthService {
     this.userRepository = AppDataSource.getRepository(User);
   }
 
-  async register(name: string, email: string, password: string) {
+  async register(firstname: string, lastname: string, address: string, phone: string, email: string, password: string) {
     const hashedPassword = await hashPassword(password);
-    const user = this.userRepository.create({ name, email, password: hashedPassword });
+    const user = this.userRepository.create({ firstname, lastname, address, phone, email, password: hashedPassword });
     await this.userRepository.save(user);
     return user;
   }
