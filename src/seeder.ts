@@ -1,7 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import config from "./config";
-// import { User, Shop, Package, Order, OrderItem, Item, Treatment, Customer } from "./models";
 import { User } from "./models/user.model";
 import { Customer } from "./models/customer.model";
 import { Item } from "./models/item.model";
@@ -10,6 +9,7 @@ import { Shop } from "./models/shop.model";
 import { Order } from "./models/order.model";
 import { OrderItem } from "./models/orderItem.model";
 import { Treatment } from "./models/treatment.model";
+import { TreatmentCost } from "./models/treatmentCost.model"; // Import TreatmentCost
 import logger from "./utils/logger";
 import { hashPassword } from "./utils/hash";
 
@@ -31,13 +31,19 @@ const createUsers = async () => {
   try {
     logger.info("Creating users...");
     const user1 = new User();
-    user1.name = "John Doe";
+    user1.firstname = "John";
+    user1.lastname = "Doe";
+    user1.address = "7, Ibom street";
+    user1.phone = "080338732773";
     user1.email = "johndoe@example.com";
     user1.password = await hashPassword("password");
     await AppDataSource.manager.save(user1);
 
     const user2 = new User();
-    user2.name = "Jane Doe";
+    user2.firstname = "Jane";
+    user2.lastname = "Doe";
+    user2.address = "8, Ibom street";
+    user2.phone = "080338732774";
     user2.email = "janedoe@example.com";
     user2.password = await hashPassword("password");
     await AppDataSource.manager.save(user2);
@@ -50,17 +56,22 @@ const createUsers = async () => {
   }
 };
 
+
 const createShops = async (users: User[]) => {
   try {
     logger.info("Creating shops...");
     const shop1 = new Shop();
-    shop1.name = "Shop 1";
+    shop1.name = "Shop 7";
     shop1.user = users[0];
+    shop1.location = "Location 1";
+    shop1.phone = "123-456-7890";
     await AppDataSource.manager.save(shop1);
-
+    
     const shop2 = new Shop();
-    shop2.name = "Shop 2";
+    shop2.name = "Shop 8";
     shop2.user = users[1];
+    shop2.location = "Location 2";
+    shop2.phone = "098-765-4321";
     await AppDataSource.manager.save(shop2);
 
     logger.info("Shops created successfully.");
@@ -75,12 +86,12 @@ const createPackages = async (shops: Shop[]) => {
   try {
     logger.info("Creating packages...");
     const package1 = new Package();
-    package1.name = "Basic Package";
+    package1.name = "Basic Package2";
     package1.shop = shops[0];
     await AppDataSource.manager.save(package1);
 
     const package2 = new Package();
-    package2.name = "Premium Package";
+    package2.name = "Premium Package2";
     package2.shop = shops[1];
     await AppDataSource.manager.save(package2);
 
@@ -91,16 +102,99 @@ const createPackages = async (shops: Shop[]) => {
     throw error;
   }
 };
+const createItems = async (shops: Shop[]) => {
+  try {
+    logger.info("Creating items...");
+    
+    const item1 = new Item();
+    item1.name = "Shirt";
+    item1.shop = shops[0];
+    await AppDataSource.manager.save(item1);
 
-const createCustomers = async () => {
+    const item2 = new Item();
+    item2.name = "Pants";
+    item2.shop = shops[1];
+    await AppDataSource.manager.save(item2);
+
+    const item3 = new Item();
+    item3.name = "Shirt";
+    item3.shop = shops[0];
+    await AppDataSource.manager.save(item3);
+
+    const item4 = new Item();
+    item4.name = "Pants";
+    item4.shop = shops[0];
+    await AppDataSource.manager.save(item4);
+
+    logger.info("Items created successfully.");
+    return [item1, item2, item3, item4];
+  } catch (error) {
+    logger.error("Error creating items: ", error.message);
+    throw error;
+  }
+};
+
+const createTreatments = async (packages: Package[]) => {
+  try {
+    logger.info("Creating treatments...");
+    const treatment1 = new Treatment();
+    treatment1.name = "Standard Treatment2";
+    treatment1.package = packages[0];
+    await AppDataSource.manager.save(treatment1);
+
+    const treatment2 = new Treatment();
+    treatment2.name = "Deluxe Treatment2";
+    treatment2.package = packages[1];
+    await AppDataSource.manager.save(treatment2);
+
+    logger.info("Treatments created successfully.");
+    return [treatment1, treatment2];
+  } catch (error) {
+    logger.error("Error creating treatments: ", error.message);
+    throw error;
+  }
+};
+
+const createTreatmentCosts = async (treatments: Treatment[]) => {
+  try {
+    logger.info("Creating treatment costs...");
+    const cost1 = new TreatmentCost();
+    cost1.treatment = treatments[0];
+    cost1.cost = 1030;
+    await AppDataSource.manager.save(cost1);
+
+    const cost2 = new TreatmentCost();
+    cost2.treatment = treatments[1];
+    cost2.cost = 1530;
+    await AppDataSource.manager.save(cost2);
+
+    logger.info("Treatment costs created successfully.");
+    return [cost1, cost2];
+  } catch (error) {
+    logger.error("Error creating treatment costs: ", error.message);
+    throw error;
+  }
+};
+
+const createCustomers = async (shops: Shop[]) => {
   try {
     logger.info("Creating customers...");
     const customer1 = new Customer();
-    customer1.name = "Customer 1";
+    customer1.firstname = "Customer 333";
+    customer1.lastname = "Doe2";
+    customer1.address = "7, Ibom street";
+    customer1.phone = "080338732773";
+    customer1.email = "customer333@example.com";
+    customer1.shops = [shops[0]];
     await AppDataSource.manager.save(customer1);
 
     const customer2 = new Customer();
-    customer2.name = "Customer 2";
+    customer2.firstname = "Customer 444";
+    customer2.lastname = "Doe2";
+    customer2.address = "8, Ibom street";
+    customer2.phone = "080338732773";
+    customer2.email = "customer444@example.com";
+    customer2.shops = [shops[1]];
     await AppDataSource.manager.save(customer2);
 
     logger.info("Customers created successfully.");
@@ -111,17 +205,19 @@ const createCustomers = async () => {
   }
 };
 
-const createOrders = async (customers: Customer[], packages: Package[]) => {
+const createOrders = async (customers: Customer[], packages: Package[], shops: Shop[]) => {
   try {
     logger.info("Creating orders...");
     const order1 = new Order();
     order1.customer = customers[0];
     order1.package = packages[0];
+    order1.shop = shops[0];
     await AppDataSource.manager.save(order1);
 
     const order2 = new Order();
-    order2.customer = customers[1];
+    order2.customer = customers[0];
     order2.package = packages[1];
+    order2.shop = shops[1];
     await AppDataSource.manager.save(order2);
 
     logger.info("Orders created successfully.");
@@ -153,57 +249,18 @@ const createOrderItems = async (orders: Order[], items: Item[]) => {
   }
 };
 
-const createItems = async () => {
-  try {
-    logger.info("Creating items...");
-    const item1 = new Item();
-    item1.name = "Shirt";
-    await AppDataSource.manager.save(item1);
-
-    const item2 = new Item();
-    item2.name = "Pants";
-    await AppDataSource.manager.save(item2);
-
-    logger.info("Items created successfully.");
-    return [item1, item2];
-  } catch (error) {
-    logger.error("Error creating items: ", error.message);
-    throw error;
-  }
-};
-
-const createTreatments = async () => {
-  try {
-    logger.info("Creating treatments...");
-    const treatment1 = new Treatment();
-    treatment1.name = "Washing";
-    treatment1.cost = 10;
-    await AppDataSource.manager.save(treatment1);
-
-    const treatment2 = new Treatment();
-    treatment2.name = "Ironing";
-    treatment2.cost = 5;
-    await AppDataSource.manager.save(treatment2);
-
-    logger.info("Treatments created successfully.");
-    return [treatment1, treatment2];
-  } catch (error) {
-    logger.error("Error creating treatments: ", error.message);
-    throw error;
-  }
-};
-
 const seed = async () => {
   try {
     await AppDataSource.initialize();
     const users = await createUsers();
     const shops = await createShops(users);
     const packages = await createPackages(shops);
-    const customers = await createCustomers();
-    const orders = await createOrders(customers, packages);
-    const items = await createItems();
-    await createOrderItems(orders, items);
-    await createTreatments();
+    const treatments = await createTreatments(packages);
+    const treatmentCosts = await createTreatmentCosts(treatments);
+    const customers = await createCustomers(shops);
+    const orders = await createOrders(customers, packages, shops);
+    const items = await createItems(shops); // Add this line to create items
+    const orderItems = await createOrderItems(orders, items);
     logger.info("Seeding completed successfully.");
     await AppDataSource.destroy();
   } catch (error) {

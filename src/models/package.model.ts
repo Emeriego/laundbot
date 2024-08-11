@@ -5,7 +5,7 @@ import { Order } from "./order.model";
 
 @Entity()
 export class Package {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()

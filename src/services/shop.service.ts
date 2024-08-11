@@ -1,4 +1,4 @@
-import AppDataSource  from '../data-source';
+import AppDataSource from '../data-source';
 import { Shop } from '../models/shop.model';
 import { User } from '../models/user.model';
 
@@ -17,6 +17,16 @@ export class ShopService {
         throw new Error('User not found.');
       }
 
+      // Check if the user already has a shop
+      const existingShop = await shopRepository.findOne({
+        where: { user: { id: userId } },
+      });
+
+      if (existingShop) {
+        throw new Error('User already has a shop.');
+      }
+
+      // Create and save the new shop
       const shop = shopRepository.create({ ...shopData, user });
       return await shopRepository.save(shop);
     } catch (error) {
@@ -71,7 +81,19 @@ export class ShopService {
       throw new Error('Unable to update shop at the moment.');
     }
   }
+  static async getShopByUserId(userId: string) {
+    try {
+      const shopRepository = AppDataSource.getRepository(Shop);
+      const shop = await shopRepository.findOne({
+        where: { user: { id: userId } },
+      });
 
+      return shop;
+    } catch (error) {
+      console.error('Error fetching shop by user ID:', error);
+      throw new Error('Unable to fetch shop by user ID at the moment.');
+    }
+  }
   static async deleteShop(id: string) {
     try {
       const shopRepository = AppDataSource.getRepository(Shop);

@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
 import { Shop } from './shop.model';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -24,8 +24,9 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(() => Shop, (shop) => shop.user)
-  shops: Shop[];
+  @OneToOne(() => Shop, (shop) => shop.user)
+  @JoinColumn()
+  shop: Shop;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

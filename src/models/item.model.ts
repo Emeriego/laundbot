@@ -1,14 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { OrderItem } from './orderItem.model';
 import { TreatmentCost } from './treatmentCost.model';
+import { Shop } from './shop.model';
 
 @Entity()
 export class Item {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
+
+  @ManyToOne(() => Shop, (shop) => shop.items) // Add relationship to Shop
+  shop: Shop;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.item)
   orderItems: OrderItem[];

@@ -27,7 +27,7 @@ class AuthService {
     if (!user || !await bcrypt.compare(password, user.password)) {
       throw new Error('Invalid email or password');
     }
-    const token = jwt.sign({ userId: user.id }, config.TOKEN_SECRET!, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id }, config.TOKEN_SECRET!, { expiresIn: '1h' });
     return { user, token };
   }
 

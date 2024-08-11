@@ -2,12 +2,12 @@ import { Router } from 'express';
 import { OrderController } from '../controllers/order.controller';
 import { authenticate } from '../middlewares/auth.middleware';
 
-const router = Router();
+const orderRoutes = Router();
 
-router.post('/', authenticate, OrderController.createOrder);
-router.get('/', authenticate, OrderController.getAllOrders);
-router.get('/:id', authenticate, OrderController.getOrderById);
-router.put('/:id', authenticate, OrderController.updateOrder);
-router.delete('/:id', authenticate, OrderController.deleteOrder);
+orderRoutes.post('/orders/create', authenticate, OrderController.createOrder);
+orderRoutes.get('/orders', authenticate, OrderController.getAllOrders);
+orderRoutes.get('/orders/:id', authenticate, OrderController.getOrderById);
+orderRoutes.put('/orders/:id', authenticate, OrderController.updateOrder);
+orderRoutes.delete('/orders/:id', authenticate, OrderController.deleteOrder);
 
-export default router;
+export default orderRoutes;

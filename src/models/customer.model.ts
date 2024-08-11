@@ -4,7 +4,7 @@ import { Order } from './order.model';
 
 @Entity()
 export class Customer {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()

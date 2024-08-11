@@ -26,6 +26,11 @@ import AppDataSource from "./data-source";
 //   userRouter,
 // } from "./routes";
 import authRoute  from "./routes/auth.route";
+import shopRoute  from "./routes/shop.route";
+import itemRoutes from "./routes/item.route";
+import customerRoute  from "./routes/customer.route";
+import orderRoutes from "./routes/order.route";
+
 import swaggerSpec from "./swaggerConfig";
 import logger from "./utils/logger";
 dotenv.config();
@@ -57,11 +62,11 @@ server.get("/api", (req: Request, res: Response) => {
 });
 
 server.use("/api", authRoute);
-// server.use("/api", userRouter);
+server.use("/api", customerRoute);
 // server.use("/api/v1/queues", ServerAdapter.getRouter());
-// server.use("/api", adminRouter);
-// server.use("/api", sendEmailRoute);
-// server.use("/api", helpRouter);
+server.use("/api", shopRoute);
+server.use("/api", itemRoutes);
+server.use("/api", orderRoutes);
 // server.use("/api", productRouter);
 // server.use("/api", paymentFlutterwaveRouter);
 // server.use("/api", paymentStripeRouter);

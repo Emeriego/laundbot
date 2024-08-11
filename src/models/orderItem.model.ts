@@ -5,7 +5,7 @@ import { Item } from './item.model';
 
 @Entity()
 export class OrderItem {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ManyToOne(() => Item, (item) => item.orderItems)

@@ -6,7 +6,7 @@ import { Shop } from "./shop.model";
 
 @Entity()
 export class Order {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ManyToOne(() => Customer, (customer) => customer.orders)
