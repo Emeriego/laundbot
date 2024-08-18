@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { Package } from './package.model';
 import { TreatmentCost } from './treatmentCost.model';
 
@@ -10,8 +10,9 @@ export class Treatment {
   @Column()
   name: string;
 
-  @ManyToOne(() => Package, (pkg) => pkg.treatments)
-  package: Package;
+  @ManyToMany(() => Package, (pkg) => pkg.treatments)
+  @JoinTable() // This decorator specifies that this side of the relationship owns the join table
+  packages: Package[];
 
   @OneToMany(() => TreatmentCost, (treatmentCost) => treatmentCost.treatment)
   treatmentCosts: TreatmentCost[];

@@ -5,16 +5,31 @@ export class TreatmentController {
   static async createTreatment(req: Request, res: Response) {
     try {
       const treatmentData = req.body.treatment;
-      const { packageId } = req.params;  // assuming packageId is passed as a URL parameter
       const costs = req.body.costs; // Expecting an array of { itemId: string, cost: number }
 
-      const treatment = await TreatmentService.createTreatment(treatmentData, packageId, costs);
+      const treatment = await TreatmentService.createTreatment(treatmentData, costs);
       res.status(201).json({ message: 'Treatment created successfully.', treatment });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   }
 
+  // {
+  //   "treatment": {
+  //     "name": "Deep Tissue Massage"
+  //   },
+  //   "costs": [
+  //     {
+  //       "itemId": "itemId1",
+  //       "cost": 25.00
+  //     },
+  //     {
+  //       "itemId": "itemId2",
+  //       "cost": 30.00
+  //     }
+  //   ]
+  // }
+  
   static async getAllTreatments(req: Request, res: Response) {
     try {
       const treatments = await TreatmentService.getAllTreatments();

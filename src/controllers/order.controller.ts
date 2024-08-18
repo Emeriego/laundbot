@@ -2,6 +2,27 @@ import { Request, Response } from 'express';
 import { OrderService } from '../services/order.service';
 
 export class OrderController {
+  // {
+  //   "order": {
+  //     "date": "2024-08-10T15:30:00Z",
+  //     "totalAmount": 150.00,
+  //     "status": "Pending",
+  //     "customerId": "customer-id-1234" // Example of an additional field
+  //   },
+  //   "orderItems": [
+  //     {
+  //       "item": "item-id-1",
+  //       "quantity": 2,
+  //       "price": 25.00
+  //     },
+  //     {
+  //       "item": "item-id-2",
+  //       "quantity": 1,
+  //       "price": 100.00
+  //     }
+  //   ]
+  // }
+  
   static async createOrder(req: Request, res: Response) {
     try {
       const shopId = req.shop.id;

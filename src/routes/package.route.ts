@@ -1,13 +1,15 @@
 import { Router } from 'express';
 import { PackageController } from '../controllers/package.controller';
+import { authenticate } from '../middlewares/auth.middleware';
 import { shopOwnershipMiddleware } from '../middlewares/shopOwnership.middleware';
 
-const router = Router();
+const packageRoutes = Router();
+packageRoutes.use(authenticate);
 
-router.post('/', shopOwnershipMiddleware, PackageController.createPackage);
-router.get('/', shopOwnershipMiddleware, PackageController.getAllPackages);
-router.get('/:id', shopOwnershipMiddleware, PackageController.getPackageById);
-router.put('/:id', shopOwnershipMiddleware, PackageController.updatePackage);
-router.delete('/:id', shopOwnershipMiddleware, PackageController.deletePackage);
+packageRoutes.post('/packages/create', shopOwnershipMiddleware, PackageController.createPackage);
+packageRoutes.get('/packages', shopOwnershipMiddleware, PackageController.getAllPackages);
+packageRoutes.get('/packages/:id', shopOwnershipMiddleware, PackageController.getPackageById);
+packageRoutes.put('/packages/:id', shopOwnershipMiddleware, PackageController.updatePackage);
+packageRoutes.delete('/packages/:id', shopOwnershipMiddleware, PackageController.deletePackage);
 
-export default router;
+export default packageRoutes;

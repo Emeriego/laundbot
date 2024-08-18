@@ -32,7 +32,7 @@ export class OrderService {
     try {
       return await this.orderRepository.find({
         where: { shop: { id: shopId } },
-        relations: ['orderItems', 'orderItems.item', 'orderItems.treatments'],
+        relations: ['orderItems', 'orderItems.item', 'orderItems.package'],
       });
     } catch (error) {
       console.error('Error retrieving orders:', error);

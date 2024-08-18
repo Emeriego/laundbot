@@ -1,13 +1,17 @@
+import { appendBaseUrl } from 'expo-router/build/fork/getPathFromState';
 import { Router } from 'express';
 import { TreatmentController } from '../controllers/treatment.controller';
+import { authenticate } from '../middlewares/auth.middleware';
 import { shopOwnershipMiddleware } from '../middlewares/shopOwnership.middleware';
 
-const router = Router();
+const treatmentRoutes = Router();
 
-router.post('/', shopOwnershipMiddleware, TreatmentController.createTreatment);
-router.get('/', shopOwnershipMiddleware, TreatmentController.getAllTreatments);
-router.get('/:id', shopOwnershipMiddleware, TreatmentController.getTreatmentById);
-router.put('/:id', shopOwnershipMiddleware, TreatmentController.updateTreatment);
-router.delete('/:id', shopOwnershipMiddleware, TreatmentController.deleteTreatment);
+treatmentRoutes.use(authenticate)
 
-export default router;
+treatmentRoutes.post('/treatments/create', shopOwnershipMiddleware, TreatmentController.createTreatment);
+treatmentRoutes.get('/treatments', shopOwnershipMiddleware, TreatmentController.getAllTreatments);
+treatmentRoutes.get('/treatments/:id', shopOwnershipMiddleware, TreatmentController.getTreatmentById);
+treatmentRoutes.put('/treatments/:id', shopOwnershipMiddleware, TreatmentController.updateTreatment);
+treatmentRoutes.delete('/treatments/:id', shopOwnershipMiddleware, TreatmentController.deleteTreatment);
+
+export default treatmentRoutes;

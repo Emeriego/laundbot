@@ -1,7 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
-import { Shop } from "./shop.model";
-import { Treatment } from "./treatment.model";
-import { Order } from "./order.model";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import { Shop } from './shop.model';
+import { Treatment } from './treatment.model';
+import { Order } from './order.model';
 
 @Entity()
 export class Package {
@@ -14,7 +14,7 @@ export class Package {
   @ManyToOne(() => Shop, (shop) => shop.packages)
   shop: Shop;
 
-  @OneToMany(() => Treatment, (treatment) => treatment.package)
+  @ManyToMany(() => Treatment, (treatment) => treatment.packages)
   treatments: Treatment[];
 
   @OneToMany(() => Order, (order) => order.package)

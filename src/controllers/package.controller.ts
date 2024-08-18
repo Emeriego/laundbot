@@ -5,30 +5,37 @@ export class PackageController {
   static async createPackage(req: Request, res: Response) {
     try {
       const shopId = req.shop.id; // Retrieved from the middleware
-      const packageData = req.body;
-      const pkg = await PackageService.createPackage(packageData, shopId);
-      res.status(201).json({ message: 'package created successfully.', pkg });
+      const packageData = req.body.package;
+      const treatmentIds = req.body.treatmentIds; // Expecting an array of treatment IDs
+  
+      const pkg = await PackageService.createPackage(packageData, shopId, treatmentIds);
+      res.status(201).json({ message: 'Package created successfully.', pkg });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   }
+  
 
-  static async getAllPackages(req: Request, res: Response) {
-    try {
-      const shopId = req.shop.id; // Retrieved from the middleware
-      const packages = await PackageService.getAllPackages(shopId);
-      res.status(200).json({ message: 'Packages retrieved successfully.', packages });
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+// package.controller.ts
+static async getAllPackages(req: Request, res: Response) {
+  try {
+    const shopId = req.shop.id; // Retrieved from the middleware
+    const packages = await PackageService.getAllPackages(shopId);
+
+    res.status(200).json({ message: 'Packages retrieved successfully.', packages });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
+}
+
 
   static async getPackageById(req: Request, res: Response) {
     try {
       const { id } = req.params;
       const shopId = req.shop.id; // Retrieved from the middleware
       const pkg = await PackageService.getPackageById(id, shopId);
-      res.status(200).json({ message: 'package retrieved successfully.', pkg });
+      
+      res.status(200).json({ message: 'Package retrieved successfully.', pkg });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
