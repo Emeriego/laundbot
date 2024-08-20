@@ -21,6 +21,9 @@ export class Order {
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
   orderItems: OrderItem[];
 
+  @Column({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP + INTERVAL 3 DAY'})
+  deliveryDate: Date;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 

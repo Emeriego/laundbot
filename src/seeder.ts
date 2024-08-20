@@ -294,13 +294,16 @@ const createOrderItems = async (orders: Order[], items: Item[], packages: Packag
 
     // Create OrderItem 1 with the first package
     const orderItem1 = new OrderItem();
+    orderItem1.quantity = 2;
+    orderItem1.tag = "001";
     orderItem1.order = orders[0];
     orderItem1.item = items[0];
     orderItem1.package = packages[0]; // Associate with the first package
     await AppDataSource.manager.save(orderItem1);
-
     // Create OrderItem 2 with the second package
     const orderItem2 = new OrderItem();
+    orderItem2.quantity = 1;
+    orderItem2.tag = "002";
     orderItem2.order = orders[1];
     orderItem2.item = items[1];
     orderItem2.package = packages[1]; // Associate with the second package
