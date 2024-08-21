@@ -1,5 +1,6 @@
 import { Repository } from 'typeorm';
 import { User } from '../models/user.model';
+import { Shop } from '../models/shop.model';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import nodemailer from 'nodemailer';
@@ -22,15 +23,32 @@ class AuthService {
     return user;
   }
 
+  // async login(email: string, password: string) {
+  //   const user = await this.userRepository.findOne({ where: { email } });
+  //   if (!user || !await bcrypt.compare(password, user.password)) {
+  //     throw new Error('Invalid email or password');
+  //   }
+  //   const token = jwt.sign({ id: user.id }, config.TOKEN_SECRET!, { expiresIn: '1h' });
+  //   return { user, token };
+  // }
+
   async login(email: string, password: string) {
     const user = await this.userRepository.findOne({ where: { email } });
-    if (!user || !await bcrypt.compare(password, user.password)) {
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new Error('Invalid email or password');
     }
-    const token = jwt.sign({ id: user.id }, config.TOKEN_SECRET!, { expiresIn: '1h' });
-    return { user, token };
-  }
 
+    // Fetch the shop associated with the user
+    const shopRepository = AppDataSource.getRepository(Shop);
+    const shop = await shopRepository.findOne({
+      where: { user: { id: user.id } },
+    });
+
+    // Include the shop ID in the token payload
+    const tokenPayload = { id: user.id, firstname: user.firstname, address: user.address, phone: user.phone, email: user.email,  shopId: shop?.id };
+    const token = jwt.sign(tokenPayload, config.TOKEN_SECRET!, { expiresIn: '1h' });
+    return {shop, token };
+  }
   async forgotPassword(email: string) {
     const user = await this.userRepository.findOne({ where: { email } });
     if (!user) throw new Error('Email not found');

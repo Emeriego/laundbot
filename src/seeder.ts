@@ -270,14 +270,18 @@ const createOrders = async (customers: Customer[], packages: Package[], shops: S
     logger.info("Creating orders...");
     const order1 = new Order();
     order1.customer = customers[0];
+    order1.tag = "AA01";
     order1.package = packages[0];
     order1.shop = shops[0];
+    order1.status = "PENDING";
     await AppDataSource.manager.save(order1);
 
     const order2 = new Order();
     order2.customer = customers[0];
+    order2.tag = "AA02";
     order2.package = packages[1];
     order2.shop = shops[1];
+    order2.status = "DELIVERED";
     await AppDataSource.manager.save(order2);
 
     logger.info("Orders created successfully.");
@@ -295,7 +299,7 @@ const createOrderItems = async (orders: Order[], items: Item[], packages: Packag
     // Create OrderItem 1 with the first package
     const orderItem1 = new OrderItem();
     orderItem1.quantity = 2;
-    orderItem1.tag = "001";
+    orderItem1.tag = "AA01-1";
     orderItem1.order = orders[0];
     orderItem1.item = items[0];
     orderItem1.package = packages[0]; // Associate with the first package
@@ -303,14 +307,30 @@ const createOrderItems = async (orders: Order[], items: Item[], packages: Packag
     // Create OrderItem 2 with the second package
     const orderItem2 = new OrderItem();
     orderItem2.quantity = 1;
-    orderItem2.tag = "002";
-    orderItem2.order = orders[1];
+    orderItem2.tag = "AA01-2";
+    orderItem2.order = orders[0];
     orderItem2.item = items[1];
     orderItem2.package = packages[1]; // Associate with the second package
     await AppDataSource.manager.save(orderItem2);
 
+    const orderItem3 = new OrderItem();
+    orderItem3.quantity = 2;
+    orderItem3.tag = "AA02-1";
+    orderItem3.order = orders[1];
+    orderItem3.item = items[0];
+    orderItem3.package = packages[0]; // Associate with the first package
+    await AppDataSource.manager.save(orderItem3);
+
+    const orderItem4 = new OrderItem();
+    orderItem4.quantity = 1;
+    orderItem4.tag = "AA02-2";
+    orderItem4.order = orders[1];
+    orderItem4.item = items[1];
+    orderItem4.package = packages[1]; // Associate with the second package
+    await AppDataSource.manager.save(orderItem4);
+
     logger.info("Order items created successfully.");
-    return [orderItem1, orderItem2];
+    return [orderItem1, orderItem2, orderItem3, orderItem4];
   } catch (error) {
     logger.error("Error creating order items: ", error.message);
     throw error;

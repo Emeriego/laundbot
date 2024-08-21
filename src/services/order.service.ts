@@ -2,31 +2,67 @@ import { Repository } from 'typeorm';
 import { Order } from '../models/order.model';
 import { OrderItem } from '../models/orderItem.model';
 import AppDataSource from '../data-source';
+import { generateNextOrderTag } from '../utils/tagGenerator';
+
 
 export class OrderService {
   private static orderRepository: Repository<Order> = AppDataSource.getRepository(Order);
   private static orderItemRepository: Repository<OrderItem> = AppDataSource.getRepository(OrderItem);
 
+  // static async createOrder(shopId: string, orderData: Partial<Order>, orderItems: Partial<OrderItem>[]) {
+  //   try {
+  //     const order = this.orderRepository.create({ ...orderData, shop: { id: shopId } });
+  //     const savedOrder = await this.orderRepository.save(order);
+
+  //     if (orderItems && orderItems.length > 0) {
+  //       const orderItemEntities = orderItems.map((item) => {
+  //         const orderItem = this.orderItemRepository.create(item);
+  //         orderItem.order = savedOrder;
+  //         return orderItem;
+  //       });
+  //       await this.orderItemRepository.save(orderItemEntities);
+  //     }
+
+  //     return savedOrder;
+  //   } catch (error) {
+  //     console.error('Error creating order:', error);
+  //     throw new Error('Unable to create order at the moment.');
+  //   }
+  // }
+
   static async createOrder(shopId: string, orderData: Partial<Order>, orderItems: Partial<OrderItem>[]) {
     try {
-      const order = this.orderRepository.create({ ...orderData, shop: { id: shopId } });
+      const lastOrder = await this.orderRepository.findOne({
+        where: { shop: { id: shopId } },
+        order: { createdAt: 'DESC' }, 
+        select: ['tag'],
+      });
+  
+      const nextTag = generateNextOrderTag(lastOrder?.tag);
+  
+      const order = this.orderRepository.create({ ...orderData, shop: { id: shopId }, tag: nextTag });
       const savedOrder = await this.orderRepository.save(order);
-
+  
       if (orderItems && orderItems.length > 0) {
-        const orderItemEntities = orderItems.map((item) => {
+        const orderItemEntities = orderItems.map((item, index) => {
           const orderItem = this.orderItemRepository.create(item);
           orderItem.order = savedOrder;
+  
+          // Assign a tag to each item within this order (e.g., "AA01-1", "AA01-2")
+          orderItem.tag = `${nextTag}-${index + 1}`;
+  
           return orderItem;
         });
         await this.orderItemRepository.save(orderItemEntities);
       }
-
+  
       return savedOrder;
     } catch (error) {
       console.error('Error creating order:', error);
       throw new Error('Unable to create order at the moment.');
     }
   }
+  
 
   static async getAllOrders(shopId: string) {
     try {

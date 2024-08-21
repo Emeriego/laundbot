@@ -9,8 +9,14 @@ export class Order {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column()
+  tag: string;
+
   @ManyToOne(() => Customer, (customer) => customer.orders)
   customer: Customer;
+
+  @Column()
+  status: string;
 
   @ManyToOne(() => Package, (pkg) => pkg.orders)
   package: Package;
