@@ -35,6 +35,9 @@ export class Shop {
   location: string;
 
   @Column()
+  description: string;
+
+  @Column()
   phone: string;
   
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

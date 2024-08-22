@@ -63,6 +63,7 @@ const createShops = async (users: User[]) => {
     const shop1 = new Shop();
     shop1.name = "Shop 7";
     shop1.user = users[0];
+    shop1.description = "This is a shop";
     shop1.location = "Location 1";
     shop1.phone = "123-456-7890";
     await AppDataSource.manager.save(shop1);
@@ -71,6 +72,7 @@ const createShops = async (users: User[]) => {
     shop2.name = "Shop 8";
     shop2.user = users[1];
     shop2.location = "Location 2";
+    shop2.description = "This is another shop";
     shop2.phone = "098-765-4321";
     await AppDataSource.manager.save(shop2);
 
@@ -296,6 +298,7 @@ const createOrderItems = async (orders: Order[], items: Item[], packages: Packag
   try {
     logger.info("Creating order items...");
 
+    // 
     // Create OrderItem 1 with the first package
     const orderItem1 = new OrderItem();
     orderItem1.quantity = 2;
