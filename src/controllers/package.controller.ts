@@ -5,8 +5,8 @@ export class PackageController {
   static async createPackage(req: Request, res: Response) {
     try {
       const shopId = req.shop.id; // Retrieved from the middleware
-      const packageData = req.body.package;
-      const treatmentIds = req.body.treatmentIds; // Expecting an array of treatment IDs
+      const packageData = req.body.packages.package;
+      const treatmentIds = req.body.packages.treatments; // Expecting an array of treatment IDs
   
       const pkg = await PackageService.createPackage(packageData, shopId, treatmentIds);
       res.status(201).json({ message: 'Package created successfully.', pkg });
@@ -15,7 +15,41 @@ export class PackageController {
     }
   }
   
-
+  static async createPackages(req: Request, res: Response) {
+    try {
+      const shopId = req.shop.id; // Assuming req.shop.id is correctly set
+      const packagesData = req.body.packages;
+  
+      if (!Array.isArray(packagesData) || packagesData.length === 0) {
+        return res.status(400).json({ message: 'No packages data provided.' });
+      }
+  
+      const createdPackages = [];
+  
+      for (const packageData of packagesData) {
+        const { pkgData, treatments } = packageData; // Assuming each packageData has `pkgData` and `treatments`
+        const treatmentIds = treatments.map(t => t.id);
+  
+        if (!pkgData || !pkgData.name) {
+          return res.status(400).json({ message: 'Each package must have a name.' });
+        }
+  
+        console.log("controllerrrrXX", treatments, treatmentIds);
+  
+        const pkg = await PackageService.createPackage(pkgData, shopId, treatmentIds);
+        createdPackages.push(pkg);
+      }
+  
+      res.status(201).json({
+        message: `${createdPackages.length} package(s) created successfully.`,
+        packages: createdPackages,
+      });
+    } catch (error) {
+      console.error('Error creating packages:', error);
+      res.status(500).json({ message: error.message });
+    }
+  }
+  
 // package.controller.ts
 static async getAllPackages(req: Request, res: Response) {
   try {

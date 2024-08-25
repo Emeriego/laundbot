@@ -6,7 +6,7 @@ import { shopOwnershipMiddleware } from '../middlewares/shopOwnership.middleware
 const packageRoutes = Router();
 packageRoutes.use(authenticate);
 
-packageRoutes.post('/packages/create', shopOwnershipMiddleware, PackageController.createPackage);
+packageRoutes.post('/packages/create', shopOwnershipMiddleware, PackageController.createPackages);
 packageRoutes.get('/packages', shopOwnershipMiddleware, PackageController.getAllPackages);
 packageRoutes.get('/packages/:id', shopOwnershipMiddleware, PackageController.getPackageById);
 packageRoutes.put('/packages/:id', shopOwnershipMiddleware, PackageController.updatePackage);

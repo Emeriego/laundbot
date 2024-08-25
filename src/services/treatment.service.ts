@@ -6,55 +6,14 @@ import { Item } from '../models/item.model';
 
 export class TreatmentService {
 
-  static async createTreatment(treatmentData: Partial<Treatment>, costs: { itemId: string, cost: number }[]) {
-    try {
-      const treatmentRepository = AppDataSource.getRepository(Treatment);
-      const itemRepository = AppDataSource.getRepository(Item);
-      const treatmentCostRepository = AppDataSource.getRepository(TreatmentCost);
-
-      // Create the treatment
-      const treatment = treatmentRepository.create(treatmentData);
-      await treatmentRepository.save(treatment);
-
-      // Create treatment costs for each item
-      for (const cost of costs) {
-        const item = await itemRepository.findOne({ where: { id: cost.itemId } });
-
-        if (!item) {
-          throw new Error(`Item with id ${cost.itemId} not found.`);
-        }
-
-        const treatmentCost = treatmentCostRepository.create({
-          treatment,
-          item,
-          cost: cost.cost,
-        });
-
-        await treatmentCostRepository.save(treatmentCost);
-      }
-
-      return treatment;
-    } catch (error) {
-      console.error('Error creating treatment:', error);
-      throw new Error('Unable to create treatment at the moment.');
-    }
-  }
-  // static async createTreatment(treatmentData: Partial<Treatment>, packageIds: string[], costs: { itemId: string, cost: number }[]) {
+  // static async createTreatment(treatmentData: Partial<Treatment>, costs: { itemId: string, cost: number }[]) {
   //   try {
   //     const treatmentRepository = AppDataSource.getRepository(Treatment);
-  //     const packageRepository = AppDataSource.getRepository(Package);
   //     const itemRepository = AppDataSource.getRepository(Item);
   //     const treatmentCostRepository = AppDataSource.getRepository(TreatmentCost);
 
-  //     // Ensure packages exist using findBy with In operator
-  //     const packages = await packageRepository.findBy({ id: In(packageIds) });
 
-  //     if (packages.length !== packageIds.length) {
-  //       throw new Error('One or more packages not found.');
-  //     }
-
-  //     // Create the treatment
-  //     const treatment = treatmentRepository.create({ ...treatmentData, packages });
+  //     const treatment = treatmentRepository.create({id: treatmentData.id, name: treatmentData.name});
   //     await treatmentRepository.save(treatment);
 
   //     // Create treatment costs for each item
@@ -80,6 +39,44 @@ export class TreatmentService {
   //     throw new Error('Unable to create treatment at the moment.');
   //   }
   // }
+  static async createTreatment(treatmentData: Partial<Treatment>, costs: { itemId: string, cost: number }[]) {
+    try {
+        const treatmentRepository = AppDataSource.getRepository(Treatment);
+        const itemRepository = AppDataSource.getRepository(Item);
+        const treatmentCostRepository = AppDataSource.getRepository(TreatmentCost);
+
+        // Create and save the treatment
+
+        const treatment = treatmentRepository.create({ id: treatmentData.id, name: treatmentData.name });
+
+        await treatmentRepository.save(treatment);
+
+        // Create treatment costs for each item
+        for (const cost of costs) {
+          const item = await itemRepository.findOne({ where: { id: cost.itemId } });
+      
+          if (!item) {
+              throw new Error(`Item with id ${cost.itemId} not found.`);
+          }
+      
+          const treatmentCost = treatmentCostRepository.create({
+              treatment,
+              item,
+              cost: cost.cost,
+          });
+      
+          await treatmentCostRepository.save(treatmentCost);
+      }
+      
+
+        return treatment;
+    } catch (error) {
+        console.error('Error creating treatment:', error);
+        throw new Error('Unable to create treatment at the moment.');
+    }
+}
+
+ 
   static async getAllTreatments() {
     try {
       const treatmentRepository = AppDataSource.getRepository(Treatment);

@@ -37,7 +37,6 @@ export class CustomerService {
       const customerRepository = AppDataSource.getRepository(Customer);
       const customer = customerRepository.create(customerData);
   
-      // Fetch the full Shop entity if necessary
       const shopRepository = AppDataSource.getRepository(Shop);
       const shop = await shopRepository.findOne({ where: { id: shopId } });
   
@@ -45,7 +44,7 @@ export class CustomerService {
         throw new Error('Shop not found');
       }
   
-      customer.shops = [shop]; // Assign the full Shop object, not just the ID
+      customer.shops = [shop];
   
       return await customerRepository.save(customer);
     } catch (error) {

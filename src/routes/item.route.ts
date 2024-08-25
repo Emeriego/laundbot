@@ -7,7 +7,7 @@ const itemRoutes = Router();
 itemRoutes.use(authenticate);
 
 
-itemRoutes.post('/items/create', shopOwnershipMiddleware, ItemController.createItem);
+itemRoutes.post('/items/create', shopOwnershipMiddleware, ItemController.createItems);
 itemRoutes.get('/items', shopOwnershipMiddleware, ItemController.getAllItems);
 itemRoutes.get('/items/:id', shopOwnershipMiddleware, ItemController.getItemById);
 itemRoutes.put('/items/:id', shopOwnershipMiddleware, ItemController.updateItem);

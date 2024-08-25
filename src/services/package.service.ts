@@ -2,6 +2,8 @@ import AppDataSource  from '../data-source';
 import { Package } from '../models/package.model';
 import { Shop } from '../models/shop.model';
 import { Treatment } from '../models/treatment.model';
+import { In as TypeORMIn } from 'typeorm';
+
 
 export class PackageService {
   // {
@@ -16,29 +18,33 @@ export class PackageService {
       const treatmentRepository = AppDataSource.getRepository(Treatment);
   
       // Find the shop
-      const shop = await shopRepository.findOne({
-        where: { id: shopId },
-      });
-  
+      const shop = await shopRepository.findOne({ where: { id: shopId } });
       if (!shop) {
         throw new Error('Shop not found.');
       }
   
       // Find treatments
-      const treatments = await treatmentRepository.findBy({ id: In(treatmentIds) });
+      const treatments = await treatmentRepository.findBy({ id: TypeORMIn(treatmentIds) });
   
       if (treatments.length !== treatmentIds.length) {
         throw new Error('One or more treatments not found.');
       }
   
+      // Ensure packageData includes the name field
+      if (!packageData.name) {
+        throw new Error('Package name is required.');
+      }
+  
       // Create the package and associate treatments
       const pkg = packageRepository.create({ ...packageData, shop, treatments });
+      console.log("created package", pkg);
       return await packageRepository.save(pkg);
     } catch (error) {
       console.error('Error creating package:', error);
       throw new Error('Unable to create package at the moment.');
     }
   }
+  
 static async getAllPackages(shopId: string) {
   try {
     const packageRepository = AppDataSource.getRepository(Package);

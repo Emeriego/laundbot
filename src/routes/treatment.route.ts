@@ -8,7 +8,7 @@ const treatmentRoutes = Router();
 
 treatmentRoutes.use(authenticate)
 
-treatmentRoutes.post('/treatments/create', shopOwnershipMiddleware, TreatmentController.createTreatment);
+treatmentRoutes.post('/treatments/create', shopOwnershipMiddleware, TreatmentController.createTreatments);
 treatmentRoutes.get('/treatments', shopOwnershipMiddleware, TreatmentController.getAllTreatments);
 treatmentRoutes.get('/treatments/:id', shopOwnershipMiddleware, TreatmentController.getTreatmentById);
 treatmentRoutes.put('/treatments/:id', shopOwnershipMiddleware, TreatmentController.updateTreatment);

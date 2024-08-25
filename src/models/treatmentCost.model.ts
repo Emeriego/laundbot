@@ -16,6 +16,7 @@ export class TreatmentCost {
   @Column('decimal')
   cost: number;
 
+  
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 

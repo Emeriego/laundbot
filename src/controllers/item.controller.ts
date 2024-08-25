@@ -2,22 +2,36 @@ import { Request, Response } from 'express';
 import { ItemService } from '../services/item.service';
 
 export class ItemController {
-  static async createItem(req: Request, res: Response) {
+  static async createItems(req: Request, res: Response) {
     try {
-      const itemData = req.body;
+      const itemsData = req.body.items; // Assuming the items are sent in an array under `items` key
       const shopId = req.shop?.id;
+  
       if (!shopId) {
         return res.status(400).json({ message: 'Shop not found in request.' });
       }
-
-      const item = await ItemService.createItem(shopId, itemData);
-      res.status(201).json({ message: 'Item created successfully.', item });
+  
+      if (!Array.isArray(itemsData) || itemsData.length === 0) {
+        return res.status(400).json({ message: 'No items data provided.' });
+      }
+  
+      const createdItems = [];
+  
+      for (const itemData of itemsData) {
+        const item = await ItemService.createItem(shopId, itemData);
+        createdItems.push(item);
+      }
+  
+      res.status(201).json({
+        message: `${createdItems.length} item(s) created successfully.`,
+        items: createdItems,
+      });
     } catch (error) {
-      console.error('Error creating item:', error);
+      console.error('Error creating items:', error);
       res.status(500).json({ message: error.message });
     }
   }
-
+  
   static async getAllItems(req: Request, res: Response) {
     try {
       const shopId = req.shop?.id;

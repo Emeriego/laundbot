@@ -4,7 +4,8 @@ import { TreatmentCost } from './treatmentCost.model';
 
 @Entity()
 export class Treatment {
-  @PrimaryGeneratedColumn('uuid')
+  
+  @Column({ primary: true })
   id: string;
 
   @Column()
