@@ -12,7 +12,7 @@ orderRoutes.use(shopOwnershipMiddleware);
 orderRoutes.post('/orders/create', OrderController.createOrder);
 orderRoutes.get('/orders', OrderController.getAllOrders);
 orderRoutes.get('/orders/:id', OrderController.getOrderById);
-orderRoutes.put('/orders/:id', OrderController.updateOrder);
+orderRoutes.put('/orders/:id', OrderController.updateOrderStatus);
 orderRoutes.delete('/orders/:id', OrderController.deleteOrder);
 
 export default orderRoutes;

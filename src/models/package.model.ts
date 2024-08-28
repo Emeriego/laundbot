@@ -1,7 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, OneToMany } from 'typeorm';
 import { Shop } from './shop.model';
 import { Treatment } from './treatment.model';
-import { Order } from './order.model';
+import { OrderItem } from './orderItem.model';
 
 @Entity()
 export class Package {
@@ -17,12 +17,13 @@ export class Package {
   @ManyToMany(() => Treatment, (treatment) => treatment.packages)
   treatments: Treatment[];
 
-  @OneToMany(() => Order, (order) => order.package)
-  orders: Order[];
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.package)
+  orderItems: OrderItem[];
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+  orders: any;
 }

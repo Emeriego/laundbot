@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
 import { Customer } from "./customer.model";
-import { Package } from "./package.model";
 import { OrderItem } from "./orderItem.model";
 import { Shop } from "./shop.model";
 
@@ -18,17 +17,17 @@ export class Order {
   @Column()
   status: string;
 
-  @ManyToOne(() => Package, (pkg) => pkg.orders)
-  package: Package;
-
   @ManyToOne(() => Shop, (shop) => shop.orders)
   shop: Shop;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
   orderItems: OrderItem[];
 
-  @Column({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP + INTERVAL 3 DAY'})
+  @Column({ type: 'timestamp' })
   deliveryDate: Date;
+
+  @Column({ type: 'float', default: 0 })
+  totalAmount: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

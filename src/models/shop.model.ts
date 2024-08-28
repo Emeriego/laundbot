@@ -31,6 +31,9 @@ export class Shop {
   @JoinTable()
   customers: Customer[];
 
+  @Column({type: 'text', default: 'https://via.placeholder.com/150'})
+  imageUrl: string;
+
   @Column()
   location: string;
 

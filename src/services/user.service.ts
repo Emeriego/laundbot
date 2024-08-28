@@ -7,7 +7,6 @@ export class UserService {
     try {
       const userRepository = AppDataSource.getRepository(User);
 
-      // Check if user already exists
       const existingUser = await userRepository.findOne({
         where: { email: userData.email },
       });

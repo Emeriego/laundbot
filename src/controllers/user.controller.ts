@@ -31,6 +31,7 @@ export class UserController {
     }
   }
 
+  
   static async updateUser(req: Request, res: Response) {
     try {
       const { id } = req.params;

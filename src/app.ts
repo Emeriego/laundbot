@@ -5,26 +5,6 @@ import "reflect-metadata";
 import swaggerUi from "swagger-ui-express";
 import config from "./config";
 import AppDataSource from "./data-source";
-// import { errorHandler, routeNotFound } from "./middleware";
-// import {
-//   adminRouter,
-//   authRoute,
-//   blogRouter,
-//   contactRouter,
-//   exportRouter,
-//   faqRouter,
-//   helpRouter,
-//   jobRouter,
-//   notificationRouter,
-//   paymentFlutterwaveRouter,
-//   paymentRouter,
-//   paymentStripeRouter,
-//   productRouter,
-//   runTestRouter,
-//   sendEmailRoute,
-//   testimonialRoute,
-//   userRouter,
-// } from "./routes";
 import authRoute  from "./routes/auth.route";
 import shopRoute  from "./routes/shop.route";
 import itemRoutes from "./routes/item.route";
@@ -66,29 +46,14 @@ server.get("/api", (req: Request, res: Response) => {
 
 server.use("/api", authRoute);
 server.use("/api", customerRoute);
-// server.use("/api/v1/queues", ServerAdapter.getRouter());
 server.use("/api", shopRoute);
 server.use("/api", itemRoutes);
 server.use("/api", orderRoutes);
 server.use("/api", packageRoutes);
 server.use("/api", treatmentRoutes);
 server.use("/api", userRoutes);
-// server.use("/api", smsRouter);
-// server.use("/api", notificationRouter);
-// server.use("/api", paymentRouter);
-// server.use("/api", orgRouter);
-// server.use("/api", exportRouter);
-// server.use("/api", testimonialRoute);
-// server.use("/api", blogRouter);
-// server.use("/api", contactRouter);
-// server.use("/api", jobRouter);
-// server.use("/api", faqRouter);
-// server.use("/api", roleRouter);
 
 server.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-// server.use(routeNotFound);
-// server.use(errorHandler);
 
 AppDataSource.initialize()
   .then(async () => {

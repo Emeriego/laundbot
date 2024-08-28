@@ -6,39 +6,8 @@ import { Item } from '../models/item.model';
 
 export class TreatmentService {
 
-  // static async createTreatment(treatmentData: Partial<Treatment>, costs: { itemId: string, cost: number }[]) {
-  //   try {
-  //     const treatmentRepository = AppDataSource.getRepository(Treatment);
-  //     const itemRepository = AppDataSource.getRepository(Item);
-  //     const treatmentCostRepository = AppDataSource.getRepository(TreatmentCost);
-
-
-  //     const treatment = treatmentRepository.create({id: treatmentData.id, name: treatmentData.name});
-  //     await treatmentRepository.save(treatment);
-
-  //     // Create treatment costs for each item
-  //     for (const cost of costs) {
-  //       const item = await itemRepository.findOne({ where: { id: cost.itemId } });
-
-  //       if (!item) {
-  //         throw new Error(`Item with id ${cost.itemId} not found.`);
-  //       }
-
-  //       const treatmentCost = treatmentCostRepository.create({
-  //         treatment,
-  //         item,
-  //         cost: cost.cost,
-  //       });
-
-  //       await treatmentCostRepository.save(treatmentCost);
-  //     }
-
-  //     return treatment;
-  //   } catch (error) {
-  //     console.error('Error creating treatment:', error);
-  //     throw new Error('Unable to create treatment at the moment.');
-  //   }
-  // }
+  
+  
   static async createTreatment(treatmentData: Partial<Treatment>, costs: { itemId: string, cost: number }[]) {
     try {
         const treatmentRepository = AppDataSource.getRepository(Treatment);

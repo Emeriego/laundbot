@@ -21,6 +21,7 @@ export class OrderController {
     }
   }
 
+  
   static async getAllOrders(req: Request, res: Response) {
     try {
       const shopId = req.shop.id;
@@ -36,6 +37,8 @@ export class OrderController {
     }
   }
 
+
+  
   static async getOrderById(req: Request, res: Response) {
     try {
       const shopId = req.shop.id;
@@ -78,6 +81,25 @@ export class OrderController {
     }
   }
 
+
+  static async updateOrderStatus(req: Request, res: Response) {
+    try {
+      const shopId = req.shop.id;
+      const orderId = req.params.id;
+      const { status } = req.body;
+  
+      const updatedOrder = await OrderService.updateOrderStatus(shopId, orderId, status);
+      res.status(200).json({
+        message: 'Order status updated successfully',
+        data: updatedOrder,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: error.message,
+      });
+    }
+  }
+  
   static async deleteOrder(req: Request, res: Response) {
     try {
       const shopId = req.shop.id;
