@@ -8,29 +8,29 @@ import AppDataSource from '../data-source';
 import config from '../config';
 import {hashPassword} from '../utils/hash';
 import bcrypt from 'bcrypt';
+import { OAuth2Client } from 'google-auth-library';
+
 
 class AuthService {
   private userRepository: Repository<User>;
+  private oauth2Client: OAuth2Client;
+
 
   constructor() {
     this.userRepository = AppDataSource.getRepository(User);
+    this.oauth2Client = new OAuth2Client(config.GOOGLE_CLIENT_ID);
+
   }
 
   async register(firstname: string, lastname: string, address: string, phone: string, email: string, password: string) {
+    if (!password) {
+      throw new Error('Password is required for traditional signups');
+    }
     const hashedPassword = await hashPassword(password);
     const user = this.userRepository.create({ firstname, lastname, address, phone, email, password: hashedPassword });
     await this.userRepository.save(user);
     return user;
   }
-
-  // async login(email: string, password: string) {
-  //   const user = await this.userRepository.findOne({ where: { email } });
-  //   if (!user || !await bcrypt.compare(password, user.password)) {
-  //     throw new Error('Invalid email or password');
-  //   }
-  //   const token = jwt.sign({ id: user.id }, config.TOKEN_SECRET!, { expiresIn: '1h' });
-  //   return { user, token };
-  // }
 
   async login(email: string, password: string) {
     const user = await this.userRepository.findOne({ where: { email } });
@@ -71,13 +71,55 @@ class AuthService {
       from: config.SMTP_USER,
       to: user.email,
       subject: 'Password Reset',
-    //   text: `Reset your password by clicking the link: ${resetPasswordUrl}`,
     });
   }
 
+  //googleSignup
   async googleSignup(token: string) {
-    // Implement Google Signup using Google's OAuth2 API
+    const ticket = await this.oauth2Client.verifyIdToken({
+      idToken: token,
+      audience: config.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    if (!payload) {
+      throw new Error('Google token verification failed');
+    }
+
+    const googleId = payload.sub; // Google user ID
+    const email = payload.email!;
+    const firstname = payload.given_name!;
+    const lastname = payload.family_name!;
+
+    const user = await this.findOrCreateUser({ googleId, email, firstname, lastname });
+
+    return user;
   }
+
+  async findOrCreateUser(profile: { googleId: string; email: string; firstname: string; lastname: string }) {
+    let user = await this.userRepository.findOne({ where: { email: profile.email } });
+  
+    if (!user) {
+      user = this.userRepository.create({
+        googleId: profile.googleId,
+        email: profile.email,
+        firstname: profile.firstname,
+        lastname: profile.lastname,
+        provider: 'google',
+        password: null,
+      });
+      await this.userRepository.save(user);
+    } else if (!user.googleId) {
+      user.googleId = profile.googleId;
+      user.provider = 'google';
+      await this.userRepository.save(user);
+    }
+    return user;
+  }
+  
+
+
 }
 
 export const authService = new AuthService();

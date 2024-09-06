@@ -10,18 +10,13 @@ const AppDataSource = new DataSource({
   username: config.DB_USER,
   password: config.DB_PASSWORD,
   database: config.DB_NAME,
-  url: config.DATABASE_URL,
+  // url: config.DATABASE_URL,
   synchronize: isDevelopment,
   logging: false,
   entities: ["src/models/**/*.ts"],
   migrations: ["src/migrations/**/*.ts"],
   migrationsTableName: "migrations",
-  // ssl: true,
-  // extra: {
-  // ssl: {
-  //   rejectUnauthorized: false,
-  // },
-  // },
+  
 });
 
 export async function initializeDataSource() {

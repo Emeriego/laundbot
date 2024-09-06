@@ -1,6 +1,294 @@
 import { Request, Response } from 'express';
 import { ItemService } from '../services/item.service';
 
+/**
+ * @swagger
+ * tags:
+ *   name: Item
+ *   description: Operations related to items
+ */
+
+/**
+ * @swagger
+ * /items:
+ *   post:
+ *     tags: [Item]
+ *     summary: Create multiple items for a shop
+ *     requestBody:
+ *       description: Array of items to be created
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               items:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                       example: "Item Name"
+ *             required:
+ *               - items
+ *     responses:
+ *       '201':
+ *         description: Items created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "1 item(s) created successfully."
+ *                 items:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Item'
+ *       '400':
+ *         description: Invalid request data or shop not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "No items data provided." or "Shop not found in request."
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Failed to create items. Please try again later."
+ */
+
+/**
+ * @swagger
+ * /items:
+ *   get:
+ *     tags: [Item]
+ *     summary: Get all items for a shop
+ *     responses:
+ *       '200':
+ *         description: Items retrieved successfully or no items found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Items retrieved successfully."
+ *                 items:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Item'
+ *       '400':
+ *         description: Shop not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Shop not found in request."
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Failed to retrieve items. Please try again later."
+ */
+
+/**
+ * @swagger
+ * /items/{id}:
+ *   get:
+ *     tags: [Item]
+ *     summary: Get an item by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         required: true
+ *         description: The ID of the item
+ *     responses:
+ *       '200':
+ *         description: Item retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Item retrieved successfully."
+ *                 item:
+ *                   $ref: '#/components/schemas/Item'
+ *       '404':
+ *         description: Item not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Item not found."
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Failed to retrieve item. Please try again later."
+ */
+
+/**
+ * @swagger
+ * /items/{id}:
+ *   put:
+ *     tags: [Item]
+ *     summary: Update an item by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         required: true
+ *         description: The ID of the item
+ *     requestBody:
+ *       description: Updated item details
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Updated Item Name"
+ *     responses:
+ *       '200':
+ *         description: Item updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Item updated successfully."
+ *                 updatedItem:
+ *                   $ref: '#/components/schemas/Item'
+ *       '404':
+ *         description: Item not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Item not found."
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Failed to update item. Please try again later."
+ */
+
+/**
+ * @swagger
+ * /items/{id}:
+ *   delete:
+ *     tags: [Item]
+ *     summary: Delete an item by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         required: true
+ *         description: The ID of the item
+ *     responses:
+ *       '200':
+ *         description: Item deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Item deleted successfully."
+ *       '404':
+ *         description: Item not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Item not found."
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Failed to delete item. Please try again later."
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Item:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: uuid
+ *         name:
+ *           type: string
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *       required:
+ *         - id
+ *         - name
+ */
+
 export class ItemController {
   static async createItems(req: Request, res: Response) {
     try {

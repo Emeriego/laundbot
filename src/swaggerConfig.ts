@@ -1,23 +1,27 @@
-import swaggerJsdoc, { SwaggerDefinition } from "swagger-jsdoc";
-import { version } from "../package.json";
+import swaggerJsdoc from "swagger-jsdoc";
 import config from "./config";
+import { UserSchema } from "./swagger/user.schema";
+import { OrderSchema } from "./swagger/order.schema";
+import { CustomerSchema } from "./swagger/customer.schema";
+import { ShopSchema } from "./swagger/shop.schema";
+import { ItemSchema } from "./swagger/item.schema";
+import { PackageSchema } from "./swagger/package.schema";
+import { TreatmentCostSchema } from "./swagger/treatmentCost.schema";
+import { TreatmentSchema } from "./swagger/treatment.schema";
 
-const swaggerDefinition: SwaggerDefinition = {
+// Import other schemas
+
+const swaggerDefinition = {
   openapi: "3.1.0",
   info: {
-    title: "BoilerPlate Express API with Swagger",
-    version: version,
-    // description:
-    //   "This is a simple CRUD API application made with Express and documented with Swagger",
+    title: "Laundbot API",
+    version: "1.0.0",
+    description: "API documentation for the Laundbot application.",
   },
   servers: [
     {
       url: `http://localhost:${config.port}/`,
       description: "Local server",
-    },
-    {
-      url: "https://staging.api-expressjs.boilerplate.hng.tech/",
-      description: "Live server",
     },
   ],
   components: {
@@ -27,6 +31,16 @@ const swaggerDefinition: SwaggerDefinition = {
         scheme: "bearer",
         bearerFormat: "JWT",
       },
+    },
+    schemas: {
+      User: UserSchema,
+      Order: OrderSchema,
+      Customer: CustomerSchema,
+      Shop: ShopSchema,
+      Item: ItemSchema,
+      Package: PackageSchema,
+      TreatmentCost: TreatmentCostSchema,
+      Treatment: TreatmentSchema,
     },
   },
   security: [
@@ -39,11 +53,8 @@ const swaggerDefinition: SwaggerDefinition = {
 const options = {
   swaggerDefinition,
   apis: [
-    "./src/routes/*.ts",
     "./src/controllers/*.ts",
-    "./src/services/*.ts",
-    "./src/schema/*.ts",
-  ], // Adjust these paths
+  ],
 };
 
 const specs = swaggerJsdoc(options);

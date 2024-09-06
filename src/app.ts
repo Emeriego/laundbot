@@ -16,7 +16,11 @@ import userRoutes from "./routes/user.route";
 
 import swaggerSpec from "./swaggerConfig";
 import logger from "./utils/logger";
+import session from 'express-session';
+import passport from 'passport';
+import authRoutes from './routes/auth.route';
 dotenv.config();
+
 
 const port = config.port;
 const server: Express = express();
@@ -33,6 +37,18 @@ server.use(
     ],
   }),
 );
+
+//google auth
+server.use(session({
+  secret: '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',
+  resave: false,
+  saveUninitialized: false,
+}));
+server.use(passport.initialize());
+server.use(passport.session());
+server.use('/api/auth', authRoutes);
+
+
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
@@ -63,4 +79,5 @@ AppDataSource.initialize()
   })
   .catch((error) => console.error(error));
 
+  
 export default server;

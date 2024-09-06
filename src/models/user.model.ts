@@ -6,23 +6,29 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ nullable: true })
+  googleId?: string;
+
+  @Column({ default: 'local' })
+  provider: string;
+
   @Column()
   firstname: string;
 
   @Column()
   lastname: string;
 
-  @Column()
-  address: string;
+  @Column({ nullable: true })
+  address?: string;
 
-  @Column()
-  phone: string;
+  @Column({ nullable: true })
+  phone?: string;
 
   @Column({ unique: true })
   email: string;
 
-  @Column()
-  password: string;
+  @Column({ nullable: true })
+  password?: string;
 
   @OneToOne(() => Shop, (shop) => shop.user)
   @JoinColumn()

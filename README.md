@@ -41,7 +41,7 @@ Laundbot is a laundry service management system API that provides endpoints for 
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/your-username/laundbot-api.git
+   git clone https://github.com/emeriego/laundbot-api.git
    cd laundbot-api
    ```
 

@@ -1,6 +1,367 @@
 import { Request, Response } from 'express';
 import { PackageService } from '../services/package.service';
 
+/**
+ * @swagger
+ * tags:
+ *   name: Package
+ *   description: Operations related to packages
+ */
+
+/**
+ * @swagger
+ * /packages:
+ *   post:
+ *     tags: [Package]
+ *     summary: Create a new package for a shop
+ *     requestBody:
+ *       description: Package and associated treatments to be created
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               packages:
+ *                 type: object
+ *                 properties:
+ *                   package:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                     required:
+ *                       - name
+ *                   treatments:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         id:
+ *                           type: string
+ *                           format: uuid
+ *                     example: [{ "id": "some-uuid" }]
+ *             required:
+ *               - packages
+ *     responses:
+ *       '201':
+ *         description: Package created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Package created successfully."
+ *                 pkg:
+ *                   $ref: '#/components/schemas/Package'
+ *       '400':
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "No packages data provided."
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Failed to create package. Please try again later."
+ */
+
+/**
+ * @swagger
+ * /packages:
+ *   post:
+ *     tags: [Package]
+ *     summary: Create multiple packages for a shop
+ *     requestBody:
+ *       description: Array of packages and their associated treatments to be created
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               packages:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     pkgData:
+ *                       type: object
+ *                       properties:
+ *                         name:
+ *                           type: string
+ *                       required:
+ *                         - name
+ *                     treatments:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: string
+ *                             format: uuid
+ *             required:
+ *               - packages
+ *     responses:
+ *       '201':
+ *         description: Packages created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "2 package(s) created successfully."
+ *                 packages:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Package'
+ *       '400':
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "No packages data provided."
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Failed to create packages. Please try again later."
+ */
+
+/**
+ * @swagger
+ * /packages:
+ *   get:
+ *     tags: [Package]
+ *     summary: Retrieve all packages for a shop
+ *     responses:
+ *       '200':
+ *         description: Packages retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Packages retrieved successfully."
+ *                 packages:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Package'
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Failed to retrieve packages. Please try again later."
+ */
+
+/**
+ * @swagger
+ * /packages/{id}:
+ *   get:
+ *     tags: [Package]
+ *     summary: Retrieve a package by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         required: true
+ *         description: The ID of the package
+ *     responses:
+ *       '200':
+ *         description: Package retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Package retrieved successfully."
+ *                 pkg:
+ *                   $ref: '#/components/schemas/Package'
+ *       '404':
+ *         description: Package not found or does not belong to this shop
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Package with ID {id} not found or does not belong to this shop."
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Failed to retrieve package. Please try again later."
+ */
+
+/**
+ * @swagger
+ * /packages/{id}:
+ *   put:
+ *     tags: [Package]
+ *     summary: Update a package by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         required: true
+ *         description: The ID of the package
+ *     requestBody:
+ *       description: Updated package details
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *             required:
+ *               - name
+ *     responses:
+ *       '200':
+ *         description: Package updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Package updated successfully."
+ *                 pkg:
+ *                   $ref: '#/components/schemas/Package'
+ *       '404':
+ *         description: Package not found or does not belong to this shop
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Package with ID {id} not found or does not belong to this shop."
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Failed to update package. Please try again later."
+ */
+
+/**
+ * @swagger
+ * /packages/{id}:
+ *   delete:
+ *     tags: [Package]
+ *     summary: Delete a package by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         required: true
+ *         description: The ID of the package
+ *     responses:
+ *       '200':
+ *         description: Package deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Package deleted successfully."
+ *       '404':
+ *         description: Package not found or does not belong to this shop
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Package with ID {id} not found or does not belong to this shop."
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Failed to delete package. Please try again later."
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Package:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: uuid
+ *         name:
+ *           type: string
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *       required:
+ *         - id
+ *         - name
+ */
+
+
 export class PackageController {
   static async createPackage(req: Request, res: Response) {
     try {
