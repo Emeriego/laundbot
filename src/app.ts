@@ -19,6 +19,7 @@ import logger from "./utils/logger";
 import session from 'express-session';
 import passport from 'passport';
 import authRoutes from './routes/auth.route';
+import path from 'path';
 dotenv.config();
 
 
@@ -49,7 +50,6 @@ server.use(passport.session());
 server.use('/api/auth', authRoutes);
 
 
-
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 
@@ -70,6 +70,7 @@ server.use("/api", treatmentRoutes);
 server.use("/api", userRoutes);
 
 server.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+server.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 AppDataSource.initialize()
   .then(async () => {

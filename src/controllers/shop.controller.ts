@@ -1,6 +1,12 @@
+//@ts-nocheck
 import { Request, Response } from 'express';
 import { ShopService } from '../services/shop.service';
 import { Shop } from '../models/shop.model';
+import path from 'path';
+import multer from 'multer';
+// const path = require('path');
+// const multer = require('multer');
+
 
 /**
  * @swagger
@@ -293,8 +299,10 @@ import { Shop } from '../models/shop.model';
  *                   example: Error message
  */
 
+
+
 export class ShopController {
-  static async createShop(req: Request, res: Response) {
+  static async createShop2(req: Request, res: Response) {
     try {
       const shopData = req.body;
       const userId = req.user.id;  // Assuming req.user contains the authenticated user
@@ -313,6 +321,88 @@ export class ShopController {
       res.status(500).json({ message: error.message });
     }
   }
+
+  static async createShop(req: Request, res: Response) {
+    try {
+      // Check if the image file is provided and uploaded successfully
+      const imageUrl = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : null;
+
+      const shopData = {
+        ...req.body, // Shop data from the request body
+        imageUrl,    // Attach the image URL to the shop data
+      };
+
+      const userId = req.user.id;  // Assuming req.user contains the authenticated user
+
+      // Check if the user already has a shop
+      const existingShop = await ShopService.getShopByUserId(userId);
+
+      if (existingShop) {
+        return res.status(400).json({ message: 'User already owns a shop. You cannot create another one.' });
+      }
+
+      // Proceed to create the new shop with the image
+      const shop = await ShopService.createShop(shopData, userId);
+      res.status(201).json({ message: 'Shop created successfully.', shop });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+  static async uploadShopImage(req: Request, res: Response) {
+    const storage = multer.diskStorage({
+      destination: function (req, file, cb) {
+        cb(null, 'uploads'); // Set the uploads folder
+      },
+      filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname)); // Append timestamp to the file name
+      },
+    });
+
+    const upload = multer({
+      storage: storage,
+      fileFilter: (req, file, cb) => {
+        const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
+        if (allowedTypes.includes(file.mimetype)) {
+          cb(null, true);
+        } else {
+          cb(null, false);
+          return cb(new Error('Only .png, .jpg, and .jpeg formats are allowed!'));
+        }
+      },
+    });
+
+    // Middleware to handle single file uploads
+    const uploadImage = upload.single('image');
+
+    try {
+      // Invoke the middleware function
+      uploadImage(req, res, (err) => {
+        if (err instanceof multer.MulterError) {
+          // A Multer error occurred
+          return res.status(400).json({ message: 'Multer error: ' + err.message });
+        } else if (err) {
+          // An unknown error occurred
+          return res.status(400).json({ message: 'Error: ' + err.message });
+        }
+
+        if (!req.file) {
+          return res.status(400).json({ message: 'No file uploaded or invalid file type!' });
+        }
+
+        // Everything went fine. Send feedback to the client
+        const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`; // Generate file URL
+        return res.status(200).json({
+          message: 'File uploaded successfully!',
+          fileUrl: fileUrl, // Return the file URL
+          fileName: req.file.filename,
+        });
+      });
+    } catch (error) {
+      console.error('Upload error:', error);
+      return res.status(500).json({ message: 'An error occurred while uploading the file.' });
+    }
+  }
+
 
   static async getAllShops(req: Request, res: Response) {
     try {
