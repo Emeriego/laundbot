@@ -4,9 +4,9 @@
   "description": "laundbot",
   "main": "app.ts",
   "scripts": {
+    "build": "tsc",
     "start": "node build/app.js",
     "dev": "nodemon src/app.ts",
-    "build": "tsc",
     "test": "jest",
     "test:watch": "jest --watch",
     "seed": "ts-node src/seeder.ts",

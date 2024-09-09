@@ -1,4 +1,3 @@
-import { appendBaseUrl } from 'expo-router/build/fork/getPathFromState';
 import { Router } from 'express';
 import { TreatmentController } from '../controllers/treatment.controller';
 import { authenticate } from '../middlewares/auth.middleware';
