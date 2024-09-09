@@ -1,19 +1,18 @@
 {
-    "type": "postgres",
-    "host": "localhost",
-    "port": 5432,
-    "username": "your-username",
-    "password": "your-password",
-    "database": "laundbot",
-    "synchronize": true,
-    "logging": false,
-    "entities": ["src/entity/**/*.ts"],
-    "migrations": ["src/migration/**/*.ts"],
-    "subscribers": ["src/subscriber/**/*.ts"],
-    "cli": {
-      "entitiesDir": "src/entity",
-      "migrationsDir": "src/migration",
-      "subscribersDir": "src/subscriber"
-    }
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "your-username",
+  "password": "your-password",
+  "database": "laundbot",
+  "synchronize": true,
+  "logging": false,
+  "entities": ["build/entity/**/*.js"],
+  "migrations": ["build/migration/**/*.js"],
+  "subscribers": ["build/subscriber/**/*.js"],
+  "cli": {
+    "entitiesDir": "src/entity",
+    "migrationsDir": "src/migration",
+    "subscribersDir": "src/subscriber"
   }
-  
+}
