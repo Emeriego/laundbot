@@ -49,31 +49,6 @@ class AuthService {
     const token = jwt.sign(tokenPayload, config.TOKEN_SECRET!, { expiresIn: '1h' });
     return {shop, token };
   }
-  async forgotPassword(email: string) {
-    const user = await this.userRepository.findOne({ where: { email } });
-    if (!user) throw new Error('Email not found');
-    
-    const resetToken = uuidv4();
-    // const resetPasswordUrl = `${config.FRONTEND_URL}/reset-password/${resetToken}`;
-
-    // Here you would save the token to the database and associate it with the user.
-    // For simplicity, we are skipping that step.
-
-    const transporter = nodemailer.createTransport({
-      service: 'Gmail',
-      auth: {
-        user: config.SMTP_USER,
-        pass: config.SMTP_PASSWORD,
-      },
-    });
-
-    await transporter.sendMail({
-      from: config.SMTP_USER,
-      to: user.email,
-      subject: 'Password Reset',
-    });
-  }
-
   //googleSignup
   async googleSignup(token: string) {
     const ticket = await this.oauth2Client.verifyIdToken({

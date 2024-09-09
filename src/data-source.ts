@@ -5,19 +5,24 @@ const isDevelopment = config.NODE_ENV === "development";
 
 const AppDataSource = new DataSource({
   type: "postgres",
-  host: config.DB_HOST,
-  port: Number(config.DB_PORT) || 5432,
-  username: config.DB_USER,
-  password: config.DB_PASSWORD,
-  database: config.DB_NAME,
-  // url: config.DATABASE_URL,
+  url: config.DATABASE_URL,
   synchronize: isDevelopment,
   logging: false,
   entities: ["src/models/**/*.ts"],
   migrations: ["src/migrations/**/*.ts"],
   migrationsTableName: "migrations",
+  ssl: {
+    rejectUnauthorized: false, // Necessary if you're connecting to a Render-hosted DB with SSL
+  },
   
 });
+
+// host: config.DB_HOST,
+// port: Number(config.DB_PORT) || 5432,
+// username: config.DB_USER,
+// password: config.DB_PASSWORD,
+// database: config.DB_NAME,
+
 
 export async function initializeDataSource() {
   if (!AppDataSource.isInitialized) {

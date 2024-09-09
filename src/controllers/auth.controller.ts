@@ -220,16 +220,6 @@ export class AuthController {
       res.status(400).json({ error: error.message });
     }
   }
-
-  async forgotPassword(req: Request, res: Response) {
-    try {
-      const { email } = req.body;
-      await authService.forgotPassword(email);
-      res.status(200).json({ message: 'Password reset link sent' });
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
-  }
   async googleSignup(req: Request, res: Response) {
     try {
       const token = req.body.token;

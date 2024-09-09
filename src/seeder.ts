@@ -20,11 +20,15 @@ const AppDataSource = new DataSource({
   username: config.DB_USER,
   password: config.DB_PASSWORD,
   database: config.DB_NAME,
-  synchronize: true, // use true for development to sync the database
+  url: config.DATABASE_URL,
   logging: false,
   entities: ["src/models/**/*.ts"],
   migrations: ["src/migrations/**/*.ts"],
   migrationsTableName: "migrations",
+  ssl: {
+    rejectUnauthorized: false, // Necessary if you're connecting to a Render-hosted DB with SSL
+  },
+  
 });
 
 const createUsers = async () => {
@@ -66,6 +70,8 @@ const createShops = async (users: User[]) => {
     shop1.description = "This is a shop";
     shop1.location = "Location 1";
     shop1.phone = "123-456-7890";
+    shop1.imageUrl = "https://via.placeholder.com/150";
+    
     await AppDataSource.manager.save(shop1);
     
     const shop2 = new Shop();
@@ -74,6 +80,8 @@ const createShops = async (users: User[]) => {
     shop2.location = "Location 2";
     shop2.description = "This is another shop";
     shop2.phone = "098-765-4321";
+    shop2.imageUrl = "https://via.placeholder.com/150";
+
     await AppDataSource.manager.save(shop2);
 
     logger.info("Shops created successfully.");
