@@ -2,8 +2,7 @@
   "name": "api",
   "version": "1.0",
   "description": "laundbot",
-  "main": "build/app.js",
-  "type": "commonjs",
+  "main": "app.js",
   "scripts": {
     "build": "tsc",
     "start": "node build/app.js",

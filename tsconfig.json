@@ -13,19 +13,11 @@
     "sourceMap": true,
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types", "src/types"],
-    "types": ["node", "jest"],
-    "resolveJsonModule": true,
-    "rootDir": "./src",
-    "strict": false,
-
-    
+    "types": ["jest"],
+    "resolveJsonModule": true
   },
-  "include": [
-    "src/**/*",                                // Include all files in src directory
-    "config/**/*",                             // Include all files in config directory (if needed)
-    "src/types/**/*.d.ts",
-    "tests/**/*",                              // Include all files in tests directory (if needed)
-
-  ], 
+  "types": ["node", "jest"],
+  "include": ["src/**/*", "config"],
   "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
 }
+
