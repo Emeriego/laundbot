@@ -18,7 +18,6 @@
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/data-source"
   },
   "author": "Emeriego@gmail.com",
-  "type": "module",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
