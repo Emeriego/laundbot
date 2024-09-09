@@ -2,7 +2,7 @@
   "name": "api",
   "version": "1.0",
   "description": "laundbot",
-  "main": "app.js",
+  "main": "build/app.js",
   "scripts": {
     "build": "tsc",
     "start": "node build/app.js",
