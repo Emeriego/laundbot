@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import config from "./config";
+import config from "./config/index";
 import { User } from "./models/user.model";
 import { Customer } from "./models/customer.model";
 import { Item } from "./models/item.model";

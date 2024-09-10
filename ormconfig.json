@@ -5,9 +5,11 @@
   "username": "laundbot",
   "password": "laundbot",
   "database": "laundbotdb",
-  "synchronize": true,
   "logging": false,
-  "entities": ["build/models/**/*.js"],
+  "entities": [
+    "build/**/*.model.js"
+  ],
+  "synchronize": true,
   "migrations": ["build/migration/**/*.js"],
   "subscribers": ["build/subscriber/**/*.js"],
   "cli": {

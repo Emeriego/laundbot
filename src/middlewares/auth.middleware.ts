@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/user.model';
 import AppDataSource from '../data-source';
-import config from '../config';
+import config from '../config/index';
 
 export interface AuthRequest extends Request {
   user?: User; // Ensure user is the full User object

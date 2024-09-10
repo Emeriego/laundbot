@@ -1,5 +1,5 @@
 import swaggerJsdoc from "swagger-jsdoc";
-import config from "./config";
+import config from "./config/index";
 import { UserSchema } from "./swagger/user.schema";
 import { OrderSchema } from "./swagger/order.schema";
 import { CustomerSchema } from "./swagger/customer.schema";

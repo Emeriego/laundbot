@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import config from "./config";
+import config from "./config/index";
 const isDevelopment = config.NODE_ENV === "development";
 
 const AppDataSource = new DataSource({
@@ -8,7 +8,7 @@ const AppDataSource = new DataSource({
   url: config.DATABASE_URL,
   synchronize: isDevelopment,
   logging: false,
-  entities: ["src/models/**/*.ts"],
+  entities: ["build/models/**/*.js"],
   migrations: ["src/migrations/**/*.ts"],
   migrationsTableName: "migrations",
   ssl: {

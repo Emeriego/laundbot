@@ -1,6 +1,8 @@
+//@ts-nocheck
 import { authService } from '../services/auth.service';
 import { AuthController } from '../controllers/auth.controller';
 import { Request, Response } from 'express';
+import ts from 'typescript';
 
 jest.mock('../services/auth.service');  // This will mock the entire module
 

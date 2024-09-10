@@ -3,10 +3,12 @@
   "version": "1.0",
   "description": "laundbot",
   "main": "build/app.js",
+  "type":"commonjs",
   "scripts": {
     "build": "tsc",
     "start": "node build/app.js",
     "dev": "nodemon src/app.ts",
+    "typeorm": "typeorm-ts-node-esm",
     "test": "jest",
     "test:watch": "jest --watch",
     "seed": "ts-node src/seeder.ts",

@@ -1,23 +1,22 @@
 {
   "compilerOptions": {
-    "lib": ["es5", "es6"],
-    "target": "ES2021",
+    // "lib": ["es5", "es6"],
+    "target": "ES2020",
     "module": "commonjs",
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
-    "outDir": "./build",
+    "outDir": "./build",      // Ensure this directory is used for compiled JS files
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
-    "skipLibCheck": true,
+    // "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types", "src/types"],
-    "types": ["jest"],
-    "resolveJsonModule": true
+    "types": ["jest", "node"],
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
   },
-  "types": ["node", "jest"],
-  "include": ["src/**/*", "config"],
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "build", "**/*spec.ts"]
 }
-

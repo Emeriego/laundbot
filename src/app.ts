@@ -1,9 +1,10 @@
+//@ts-nocheck
 import cors from "cors";
 import dotenv from "dotenv";
 import express, { Express, Request, Response } from "express";
 import "reflect-metadata";
 import swaggerUi from "swagger-ui-express";
-import config from "./config";
+import config from "./config/index";
 import AppDataSource from "./data-source";
 import authRoute  from "./routes/auth.route";
 import shopRoute  from "./routes/shop.route";

@@ -1,6 +1,6 @@
 //@ts-nocheck
-import { CustomerService } from '../src/services/customer.service';
-import { CustomerController } from '../src/controllers/customer.controller';
+import { CustomerService } from '../services/customer.service';
+import { CustomerController } from '../controllers/customer.controller';
 import { Request, Response } from 'express';
 
 jest.mock('../services/customer.service');

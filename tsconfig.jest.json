@@ -4,6 +4,6 @@
       "types": ["jest", "node"]
     },
     "include": ["src/**/*.ts"],
-    "exclude": ["node_modules", "dist/**/*.ts"]
+    "exclude": ["node_modules", "build/**/*.js"]
   }
   
