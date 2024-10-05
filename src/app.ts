@@ -75,7 +75,7 @@ server.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 AppDataSource.initialize()
   .then(async () => {
-    console.log('Render Database connected Successfully');
+    console.log('Supabase Database connected Successfully');
     server.listen(port, () => {
       logger.info(`Server is listening on port ${port}`);
     });
